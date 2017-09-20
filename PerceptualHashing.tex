@@ -1,0 +1,49 @@
+\chapter{Perceptual Hashing}
+
+\label{chapter:PerceptualHashing}
+
+% ----------------
+
+\section{Definition}
+A perceptual hash function is a type of hash function that has the property to return analogous outputs if inputs are similar. This allows one to make meaningful comparisons between hashes in order to measure the similarity between the source data. The definition of a hash function according to \cite{menezes1996handbook} is: 
+
+\begin{quote}
+A hash function is a computationally efficient function mapping binary strings of arbitrary length to binary strings of some fixed length, called hash-values.
+\end{quote}
+
+In the case of a perceptual hash function, four more properties should be present according to \cite{zauner2010implementation}:
+
+\begin{quote}
+Let $H$ denote a hash function which takes one media object (e.g. an image) as input and produces a binary string of length $l$. Let $x$ denote a particular media object and $\widetilde{x}$ denote a modified version of this media object which is "perceptually similar" to $x$. Let $y$ denote a media object that is "perceptually different" from $x$. Let $x'$ and $y'$ denote hash values. ${0,1}^l$ represents binary strings of length $l$. Then the four desirable properties of a perceptual hash are identified as follows.
+
+A uniform distribution of hash-values; the hash-value should be unpredictable.
+\[\mathbb{P}(H(x)=x') \approx \frac{1}{2^l}  \quad  \forall x' \in \{0, 1\}^l\]
+
+Pairwise independence for perceptually different media objects.
+\[\mathbb{P}(H(x)=x' | H(y)=y') \approx \mathbb{P}(H(x)=x') \quad \forall x', y' \in \{0, 1\}^l\]
+
+Invariance for perceptually similar media objects.
+\[\mathbb{P}(H(x)=H(\widetilde{x})) \approx 1\]
+
+Distinction of perceptually different media objects. It should be impossible to construct a perceptually different media object that has the same hash-value as another media object.
+\[\mathbb{P}(H(x)=H(y)) \approx 0\]
+
+\end{quote}
+
+Most of the time, to achieve these properties, the perceptual hash function extracts some features of media objects that are invariant under slight modifications. For example, knowing how a compression algorithm works, it is possible to find some invariant features and then design a perceptual hash based on them. Some examples of perceptual hash functions for images are detailed later in this section.
+
+\section{Usage}
+Perceptual hash functions can be used in the context of CBIR or RIS for representing images but they are also useful in other contexts. Due to the properties inherited from the hash functions they can be used to authenticate media objects even if they are slightly modified, for example lossy compressed. The image creator can generate a perceptual hash from his original work. Then, as explained in \cite{zauner2010implementation}, he has two options. 
+
+On the one hand it is possible to sign the perceptual hash with a private key in order to have a digital signature that is robust to slight modifications, for example JPEG compression. This measure protects the receiver of the media object because he can check its authenticity.
+
+On the other hand, it is possible to use the perceptual hash for digital watermarking. This measure protects the content author. For example, a different watermark can be applied on different images. Then if an illegal copy is found the copyright owner can infer who is responsible for the data leak. 
+
+\section{Implementations}
+In this section, we present the three examples of implementations of perceptual hash functions, which take images and output binary codes, from \cite{zauner2010implementation}.
+
+The Discrete Cosine Transformation (DCT) based perceptual hash function takes advantage of the property that low-frequency DCT coefficients are mostly stable under image modifications to construct a 64 bits binary code, which are compared with a Hamming distance. See our implementation in appendix \ref{chapter:ImplementationDCTPerceptualHash}
+
+The Marr-Hildreth (MH) operator, also denoted as the Laplacian of Gaussian (LoG), is a special case of a discrete Laplace filter. It is an edge and contour detection based image feature extractor. The MH operator generates vectors encoded on 576 bits.
+
+The Radial Variance hash is based on the Radon transform that is the integral transform which consists of the integral of a function over a straight line. It is robust against various image processing steps (e.g. compression) and more robust than the DCT and MH based perceptual hash functions against geometrical transformations (e.g. rotation up to 2 degrees).

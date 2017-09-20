@@ -1,0 +1,17 @@
+\chapter{Conclusion}
+
+\label{chapter:Conclusion}
+
+% ----------------
+
+In this thesis, we present our study on Convolutional Neural Networks Features and Perceptual Hashing for Large Scale Reverse Image Search. A potential application is to find near-duplicate in large collections of images.
+
+To implement an actual reverse image search system with the content of this thesis, one can make use of the CNN Features described in chapter \ref{chapter:CNNFeaturesRobustness} to represent images, followed by the use of the method developed in chapter \ref{chapter:CNNFeaturesHashing} to learn a hash function that maps CNN Features into short binary codes, finally techniques described in chapter \ref{chapter:SearchHammingSpace} can be used to perform efficient nearest neighbor searches on binary codes.
+
+In the review part, we describe what is reverse image search and common methods to tackle this problem. We also advocate the use of convolutional neural networks to represent images, and hashing into binary codes to facilitate nearest neighbor search.
+
+The potential of CNN Features for reverse image search, even with slight modifications, is proven. Image representations extracted with convolutional neural networks on unrelated classification tasks are considerably robust against modifications. We didn't expressly compared CNN Features against other state of the art descriptors, but our experiments, along with the content of other publications presented in chapter \ref{chapter:ConvolutionalNeuralNetworks}, tend to prove that CNN Features are state of the art descriptors for reverse image search and more generally for image retrieval.
+
+We propose a method to learn a hash function that maps features into short binary codes while preserving similarity. This method is inspired from Minimal Loss Hashing, described in chapter \ref{chapter:HashingDimensionalityReduction}, but uses a new approach to optimize the cost function. We keep the codes continuous during learning, this allows us to compute the gradient of the cost function it minimize it. Although our experiments are superficial and can't prove that our method yields state of the art performances, we have very promising results. With more time, we could improve our method and evaluate its performances in comparison with state of the art techniques. Interesting directions are exhibited in the conclusion of chapter \ref{chapter:CNNFeaturesHashing}.
+
+We foresee the implementation of our method as a loss layer in a neural network framework to promise excellent results. Firstly, this would allow us to benefit from the computational power of GPU, secondly, we would be able to add hidden layers to learn non-linear projections, and finally, the joint learning of the image representation and the hash function would yield even better results.

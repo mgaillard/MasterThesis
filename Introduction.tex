@@ -1,0 +1,37 @@
+\chapter{Introduction}
+
+\section{Background}
+This study is mainly motivated by the need to find the original of an image in a large image collection given a slightly modified version of it. This problem is called Reverse Image Search (RIS) and is extensively studied because of its applications in the context of intellectual property and crime prevention. More generally, Reverse Image Search is related to Content-based Image Retrieval and Information Retrieval. Many implementations of RIS systems already exist, for example Google Images, TinEye and Microsoft PhotoDNA.
+
+As it is easy for people to take, store and share pictures, a massive amount of images appears every day on the internet. To enable indexing, searching, processing and organizing such a quickly growing volume of images, one has to develop new efficient methods capable of dealing with large scale data.
+
+In computer vision, one extracts high-dimensional feature vectors from images on which a nearest neighbor search is then performed to query images by similarity. With a very large collection of images, representations should be as small as possible to reduce storage costs. Additionally, a data structure should allow for sublinear-time search in the database of image representations. There already exist many approaches but, since this field is very wide, it is impossible to review all of them. This is why we will focus our attention only on methods based on perceptual hashing.
+
+The idea of perceptual hashing is to map similar (resp. dissimilar) inputs into similar (resp. dissimilar) binary codes according to a selected distance. This approach works very well because binary codes are compact and easy to handle on computers. Furthermore, recent work showed that it is possible to search binary codes in sub-linear time for uniformly distributed codes.
+
+Recently it has been shown that the activations within the top layers of a large convolutional neural network (CNN) provide a high-level descriptor of the visual content of an image. Even when the convolutional neural network has been trained for an unrelated classification task, the retrieval performance of this approach is competitive.
+
+\section{Motivation}
+A motivating use case could be the following. Let's imagine one man who regularly corresponds with girls on an online dating site. With a service that indexes all images reachable on the internet, for instance: Google Images or TinEye, he could reverse search some anonymous profile pictures. If the person uses the same picture somewhere else on the internet, he could find it, potentially along with other information. A Facebook profile or a work website could reveal the identity of the people and possibly more private information: work place, religious background, and so on. It is also possible to find out that the profile picture of someone is actually a photo of a Hollywood star.
+
+With this example, we can see that a reverse image search service can be helpful for common people. Obviously we don't talk about the privacy issue for the people on the internet, but by following some simple rules it is possible for them to prevent that.
+
+\section{Purpose of the thesis}
+Current implementations of Reverse Image Search can perform queries with images that are compressed, grayscaled or resized. However, other modifications are harder to deal with such as: cropping and rotation. The purpose of this thesis will be to improve the robustness of such a search engine to modifications.
+
+Based on the observation that convolutional neural networks are promising to extract robust features from images, and based on the observation that binary codes are efficient and scalable, our idea is to proceed in two steps. In a first step, we study the robustness of the CNN features vectors to modifications, the aim being to find a convolutional neural network capable of extracting robust representations. In a second step, we study how to map high-dimensional feature vectors into binary codes. By putting together these two steps, one can create a perceptual hash function that is robust to modifications. 
+
+\section{Outline}
+The thesis will be organized as follows.
+
+\begin{description}
+\item\textbf{Chapter~\ref{chapter:ReverseImageSearch} - Reverse Image Search :} presents the general concept of Reverse Image Search.
+\item\textbf{Chapter~\ref{chapter:PerceptualHashing} - Perceptual Hashing :} presents the general concept of Perceptual Hashing.
+\item\textbf{Chapter~\ref{chapter:ConvolutionalNeuralNetworks} - Convolutional Neural Networks :} presents the Convolutional Neural Networks and shows that they can extract excellent image representations.
+\item\textbf{Chapter~\ref{chapter:HashingDimensionalityReduction} - Hashing for Dimensionality Reduction :} presents how hashing can improve the efficiency of nearest neighbor search by reducing the dimension of features vectors.
+\item\textbf{Chapter~\ref{chapter:SearchHammingSpace} - Search in Hamming Space :} presents methods for nearest neighbor search for binary codes in Hamming space.
+\item\textbf{Chapter~\ref{chapter:Benchmarking} - Benchmarking :} presents our benchmark for Reverse Image Search.
+\item\textbf{Chapter~\ref{chapter:CNNFeaturesRobustness} - CNN Features Robustness :} presents the results of our benchmark on features extracted with off the shelf convolutional neural networks.
+\item\textbf{Chapter~\ref{chapter:CNNFeaturesHashing} - CNN Features Hashing :} presents our approach for learning a hash function to map CNN Features into binary codes.
+\item\textbf{Chapter~\ref{chapter:Conclusion} - Conclusion :} Concludes this master thesis.
+\end{description}

@@ -1,0 +1,30 @@
+\chapter{Search in Hamming Space}
+
+\label{chapter:SearchHammingSpace}
+
+% ----------------
+
+\section{Exhaustive Sequential Search}
+Because binary codes are storage efficient and comparisons are fast, a basic approach is to perform an exhaustive search by computing the distances to all codes in the database. This can be executed on processors and graphics processing units, and distributed on multiple computers.
+
+Processors are well suited when all binary codes in the database fit in the cache. Indeed, the popcount instruction is so fast that the search is essentially limited by the throughput of the RAM. Moreover, if the search is executed on multiples cores cache miss problems can arise. Thus, memory bandwidth and cache are both performance factors. Therefore, processors are efficient for exhaustive sequential search up to about 5 million binary codes.
+
+Graphics processing units (GPU) have higher computational power and memory bandwidth than processors. Moreover, the popcount instruction is also available. A certain number of binary codes is necessary to reach the best performance. Therefore, GPU are efficient for exhaustive sequential search starting from about 5 million binary codes.
+
+\section{Hash Table}
+The hash table lookup consists in creating a hash table on the binary codes. To perform a nearest neighbor search, we can retrieve the content of the hash buckets in the vicinity of a query code. The complexity, in this case, only depends on the length of binary codes and the search radius. For binary codes of $q$ bits, the number of distinct hash buckets to examine is \cite{norouzi2016}
+
+\[V(q,r)=\sum\limits_{z=0}^r \binom{q}{z}\]
+
+This approach is suited only for small distances because the number of hash buckets within a Hamming ball around a query grows almost exponentially with the search radius. For example, with 32 bits codes and a radius of 8 bits, about 15 million hash buckets are to explore, which is absurd if there are less than 15 million binary codes in the database, because an exhaustive sequential search would be faster. When binary codes are longer than 32 bits, which is often the case, the hash table approach is no more efficient.
+
+A recent approach based on the idea of hash table lookup is Multi-Index Hashing (MIH) \cite{norouzi2012fast}, \cite{norouzi2016}, \cite{gog2016fast}. It consists in building multiple hash tables on binary code sub-strings and yield to sub-linear run-time behavior for uniformly distributed codes.
+
+\section{Comparison}
+In this section, we compare the performances of 3 methods: exhaustive sequential search with CPU and GPU, and Multi-Index Hashing. We implemented exhaustive sequential search on CPU with OpenMP \footnote{http://www.openmp.org} and on GPU with Thrust \footnote{https://developer.nvidia.com/thrust}. We use the implementation of Multi-Index Hashing from \cite{norouzi2012fast} \footnote{https://github.com/norouzi/mih}.
+
+We compared the methods using the following protocol. A list of 64 bits binary codes is randomly generated with a uniform distribution. For each method, 10,000 fixed-radius nearest neighbor searches (with a radius fixed to 8) are performed with the first codes in the previously generated list. We measure the time to perform all queries along with the time to load data. We also check that all 3 methods are returning the same results.
+
+Our benchmark is available on GitHub \footnote{https://github.com/mgaillard/HashSearch}. To get an idea of the actual performances we recommend running it directly on the concerned hardware. On commodity hardware, a Intel i5 Ivy Bridge and a GTX 750 Ti, for a large number of hashes (at least 50M) the MIH solution is the most efficient, followed by the GPU and finally the CPU (up to about 5M hashes). Depending on the hardware these results can vary. We compared the three methods on a server equipped with two Intel Xeon E5-2630 v3 and a Tesla K80 (we used only 1 of the 2 GPU), sequential search on the CPUs seems to be always better than GPU. MIH was better than sequential search on the CPU starting from about 100M hashes.
+
+Sometimes, raw performance is not as important as power efficiency. In this case, one might want to compare the price-performance ratio. MIH only runs on one CPU core and is therefore the most efficient if the database contains enough hashes. Sequential search on CPU and GPU use all available cores and consume a lot of power, this is why they are less energy efficient.

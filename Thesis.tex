@@ -1,0 +1,234 @@
+\documentclass[fontsize=12pt,openright,twoside,paper=a4,BCOR=1cm,parskip=half]{scrbook}
+
+\newcommand{\authornamefirst}{Mathieu}
+\newcommand{\authornamemiddle}{}
+\newcommand{\authornamelast}{Gaillard}
+\newcommand{\worktitle}{Perceptual Hashing using Convolutional Neural Networks for Large Scale Reverse Image Search}
+\newcommand{\thesistype}{Masterarbeit}
+\newcommand{\thesisdate}{September 2017}
+\newcommand{\thesisprof}{Prof. Dr. Michael Granitzer}
+\newcommand{\thesissecondprof}{Prof. Dr. Lionel Brunie}
+\newcommand{\supervisor}{Dr. El{\"o}d Egyed-Zsigmond}
+\newcommand{\chair}{Chair of Data Science}
+
+\newcommand{\contactprofone}{
+\thesisprof \\
+\chair \\
+Universit\"at Passau \\
+EMail:~{\small \url{michael.granitzer@uni-passau.de}}  \\
+Web:~{\small
+\url{http://mgrani.github.io}}\\}
+
+\newcommand{\contactproftwo}{
+\thesissecondprof \\
+Institut National des Sciences Appliquées de Lyon \\
+EMail:~{\small \url{lionel.brunie@insa-lyon.fr}}  \\
+Web:~{\small
+\url{http://liris.cnrs.fr/lionel.brunie}}\\}
+
+
+\newcommand{\contactsupervisor}{
+\supervisor \\
+Institut National des Sciences Appliquées de Lyon \\
+EMail:~{\small \url{elod.egyed-zsigmond@insa-lyon.fr}}  \\
+Web:~{\small
+\url{http://liris.cnrs.fr/eegyedzs}}\\}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% PACKAGES:
+
+
+
+
+
+% Use English :
+
+% Use list of tabels, etc. in table of contents:
+\usepackage{tocbibind}
+% Encoder:????
+\usepackage[latin1]{inputenc}
+% Index-generation
+\usepackage{makeidx}
+% Einbinden von URLs:
+\usepackage{url}
+% Include .eps-files (needed also for the CNACC-logo):
+%\usepackage{epsf}
+% Special \LaTex symbols (e.g. \BibTeX):
+\usepackage{doc}
+% Include Graphic-files:
+%\usepackage{graphics}
+% Include Graphic-files:
+\usepackage{graphicx}
+% Include doc++ generated tex-files:
+%\usepackage{docxx}
+% Include PDF links
+
+%mathstuff
+\usepackage[cmex10]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+%hyperref for nice PDF output
+\usepackage[pdftex, bookmarks=true]{hyperref}
+
+\usepackage{listings}
+\usepackage{scrhack}
+\usepackage{rotating}
+\usepackage{xcolor}
+\usepackage{bbm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% OTHER SETTINGS:
+
+% Pagestyle:
+\pagestyle{headings}
+
+% Avoid 'overhang':
+\sloppy
+
+% Choose language
+\newcommand{\setlang}[1]{\selectlanguage{#1}\nonfrenchspacing}
+
+\usepackage[USenglish]{babel}
+
+
+\setlang{USenglish}
+%\setlang{german}
+
+\newcommand\norm[1]{\lVert#1\rVert}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TITLE:
+
+\begin{document}
+
+\thispagestyle{empty}
+\newpage
+
+\vspace{1cm}
+
+\begin{center}
+	\begin{tabular}{lr}
+	\includegraphics[width=6.5cm]{img/logouni.pdf}
+	&
+	\includegraphics[width=6.5cm]{img/logoinsa.png}
+	\end{tabular}
+
+	\vspace{3cm}
+	\Large{University of Passau}
+	\\
+	\Large{Faculty of Computer Science and Mathematics}
+	\\
+	\vspace{0.3cm}
+	\Large{\textbf{\chair}}
+	\\
+	\Large{\thesisprof}
+	\\
+
+	\vspace{0.6cm}
+	\Large{INSA Lyon}
+	\\
+	\Large{D{\'e}partement Informatique}
+	\\
+
+	\vspace{0.6cm}
+	\Large{Double Master Program}
+\end{center}
+
+
+\vspace{3cm}
+
+\begin{center}
+	\Huge{\textbf{\thesistype}} % Master Thesis, Programming Project
+\end{center}
+
+\begin{center}
+	\settowidth{\baselineskip}{0.4cm}
+	\LARGE{\worktitle}
+	\\
+	\Large{\authornamefirst~\authornamemiddle~\authornamelast}
+\end{center}
+
+\vfill {% \settowidth{\baselineskip}{0.2cm}
+
+\vfill
+
+
+\large{
+\begin{tabular}[l]{llll}
+
+Date:       & \thesisdate %%(\LaTeX{}$2_\epsilon$ run \today)
+\smallskip \\
+Supervisors:   & \thesisprof \\
+&\thesissecondprof \\
+	& \supervisor \\
+\end{tabular}}
+} \cleardoublepage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+% MAIN PART:
+
+% Erklärung
+\include{Legals}
+
+\include{Acknowledgements}
+
+% English abstract:
+\include{Abstract}
+% Table of contents:
+\tableofcontents
+% Introduction (Einleitung):
+\include{Introduction}
+% Text Body (Hauptteil)
+\part{Review}
+\include{ReverseImageSearch}
+\include{PerceptualHashing}
+\include{ConvolutionalNeuralNetworks}
+\include{HashingDimensionalityReduction}
+\include{SearchHammingSpace}
+\part{Contribution}
+\include{Benchmarking}
+\include{CNNFeaturesRobustness}
+\include{CNNFeaturesHashing}
+%  Conclusions (Zusammenfassung):
+\include{Conclusion}
+% Appendix (Anhänge), could have multiple chaper-files:
+\appendix
+\include{ImplementationDCTPerceptualHash}
+\include{ResultsVGG16Block5PoolMax}
+\include{OctaveImplementation}
+\include{TrainingReport}
+% List of figures (Abbildungsverzeichnis):
+\listoffigures
+% List of tables (Tabellenverzeichnis):
+\listoftables
+% Glossary (Glossar):
+%\include{Glossary}
+% List of formulae (Liste der Formelzeichen):
+%\include{Formulae}
+% Abbreviations (Abkürzungsverzeichnis):
+%\include{Abbreviations}
+
+% References (Literaturverzeichnis):
+% a) Style (with numbers: use unsrt):
+\bibliographystyle{alpha}
+% b) The File:
+\bibliography{Bibliography}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

@@ -1,0 +1,85 @@
+\chapter{Implementation of DCT-based perceptual hash}
+
+\label{chapter:ImplementationDCTPerceptualHash}
+
+% ----------------
+
+During our project, we implemented a version of the DCT based perceptual hash function with OpenCV. This one has the same retrieval performance than the original one in \cite{zauner2010implementation} and is faster.
+
+\lstset{
+	language=C++,
+	breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}
+}
+\begin{lstlisting}
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <string>
+#include <cstdint>
+
+uint64_t DctPerceptualHash(const std::string& file_path)
+{
+    uint64_t hash = 0;
+    cv::Mat input;
+    cv::Mat grayImg;
+    cv::Mat bluredImg;
+    cv::Mat resizeImg;
+    cv::Mat resizeFImg;
+    cv::Mat dctImg;
+
+    input = cv::imread(file_path);
+
+    if (input.data == NULL || (input.type() != CV_8UC3 && input.type() != CV_8U)) {
+        // If there is a reading error, return a null hash.
+        cerr << "Error reading image" << endl;
+        return 0;
+    }
+
+    // Convert the image to grayscale using its luminance
+    if(input.type() == CV_8UC3) {
+        cv::cvtColor(input, grayImg, CV_BGR2GRAY);
+    } else {
+        grayImg = input;
+    }
+
+    // Mean filter with kernel 7x7.
+    cv::blur(grayImg, bluredImg, cv::Size(7, 7));
+
+    // Resize the image to 32x32 pixels.
+    cv::resize(bluredImg, resizeImg, cv::Size(32,32));
+
+    resizeImg.convertTo(resizeFImg, CV_32F);
+    cv::dct(resizeFImg, dctImg);
+
+    std::vector<float> topLeftCoeffs;
+    // Take only the coeffs in rectangle (1, 1) ; (9, 9)
+    topLeftCoeffs.reserve(64);
+    for (int i = 1; i <= 8; i++) {
+        for (int j = 1; j <= 8; j++) {
+            topLeftCoeffs.push_back(dctImg.at<float>(i, j));
+        }
+    }
+
+    // Compute the median
+    std::vector<float> coeffs(topLeftCoeffs);
+
+    // The median of a 64 elements array is the mean between the 31th and the 32th element.
+    float median = 0;
+    std::nth_element(coeffs.begin(), coeffs.begin() + coeffs.size()/2, coeffs.end());
+    median += coeffs[coeffs.size()/2];
+    std::nth_element(coeffs.begin(), coeffs.begin() + coeffs.size()/2 - 1, coeffs.end());
+    median += coeffs[coeffs.size()/2 - 1];
+    median /= 2;
+
+    // Transform into a 64 bits integer.
+    for (int i = 0; i < topLeftCoeffs.size(); i++) {
+        hash <<= 1;
+        if (topLeftCoeffs[i] >= median) {
+            hash |= 1;
+        }
+    }
+
+    return hash;
+}
+\end{lstlisting}
